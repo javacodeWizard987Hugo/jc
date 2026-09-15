@@ -199,7 +199,6 @@ hr { margin: 18px 0; border: 1px solid #ddd; }
                     <div class="agreement-meta">
                         <p><strong>LOAN AGREEMENT</strong></p>
                         <p><strong>Agreement No:</strong> {{ $sale->invoice_number }}</p>
-                        <p><strong>Business Registration No:</strong> PV 0332403</p>
                     </div>
 
                     <div class="section">
@@ -207,8 +206,7 @@ hr { margin: 18px 0; border: 1px solid #ddd; }
                     </div>
 
                     <div class="section">
-                        <strong>Galle City Solution Pvt Ltd</strong>, a company duly incorporated under the laws of Sri Lanka,
-                        having its registered office under Business Registration No. PV 0332403
+                        <strong>J.C. ENTERPRISES</strong>
                         (hereinafter referred to as <strong>“the Company”</strong>)
                     </div>
 
@@ -305,7 +303,7 @@ hr { margin: 18px 0; border: 1px solid #ddd; }
                             The Borrower consents to the disclosure of personal data to third parties for legal,
                             recovery, compliance, or lawful purposes, and agrees that such data may be shared
                             with authorised agents, affiliates, or contractors of
-                            Galle City Solution Pvt Ltd.
+                            J.C. ENTERPRISES.
                         </li>
 
                         <li>
