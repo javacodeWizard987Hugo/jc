@@ -182,7 +182,6 @@ hr {
     <div class="agreement-meta" style="text-align:center;margin-bottom:18px;">
         <p><strong>GUARANTEE & INDEMNITY BOND</strong></p>
         <p><strong>Agreement No:</strong> {{ $sale->invoice_number }}</p>
-        <p><strong>Business Registration No:</strong> PV 0332403</p>
     </div>
 
     <div class="section">
@@ -190,8 +189,7 @@ hr {
     </div>
 
     <div class="section">
-        <strong>Galle City Solution Pvt Ltd</strong>, a company duly incorporated under the laws of Sri Lanka
-        with Business Registration No. PV 0332403
+        <strong>J.C. ENTERPRISES</strong>
         (hereinafter referred to as <strong>“the Company”</strong>).
     </div>
 
