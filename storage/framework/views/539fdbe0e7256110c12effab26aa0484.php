@@ -38,42 +38,6 @@
     <?php endif; ?>
 
     
-    <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-5 mb-6 no-print">
-        <h3 class="font-bold text-yellow-900 mb-3">📱 SMS OTP Verification</h3>
-        <p class="text-sm text-yellow-800 mb-4">An OTP must be verified before the agreement can be saved.</p>
-        
-        <div class="flex flex-wrap items-end gap-4">
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-1">Phone Number</label>
-                <input type="text" id="otp_phone" value="<?php echo e($sale->customer->phone); ?>" class="border-2 border-gray-300 rounded-lg px-3 py-2 bg-gray-100" readonly>
-            </div>
-            
-          <?php if(!$isVerified): ?>
-                <button type="button" id="send_otp_btn"
-                        class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700">
-                    Send OTP
-                </button>
-
-                <div id="otp_input_section" class="hidden flex items-end gap-2">
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Enter OTP</label>
-                        <input type="text" id="otp_code" maxlength="6" class="border-2 border-gray-300 rounded-lg px-3 py-2 w-32">
-                    </div>
-                    <button type="button" id="verify_otp_btn" class="bg-green-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-green-700">
-                        Verify OTP
-                    </button>
-                </div>
-            <?php else: ?>
-                <div class="bg-green-100 text-green-700 px-4 py-2 rounded-lg font-bold border border-green-300">
-                    ✅ Verified at <?php echo e($installment->otp_verified_at); ?>
-
-                </div>
-            <?php endif; ?>
-        </div>
-        <div id="otp_message" class="mt-2 text-sm font-semibold"></div>
-    </div>
-
-    
     <form id="agreement_form" method="POST" action="<?php echo e(route($routePrefix . '.installment-agreement.update', $sale->id)); ?>">
         <?php echo csrf_field(); ?>
         <?php echo method_field('PUT'); ?>
@@ -302,8 +266,8 @@
                 🖨️ Print Application Form
             </a>
 
-            <button type="submit" id="save_agreement_btn" <?php if(!$isVerified && !$isAdmin): ?> disabled <?php endif; ?>
-                class="px-6 py-3 <?php echo e(($isVerified || $isAdmin) ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-400 cursor-not-allowed'); ?> text-white rounded-lg font-bold">
+            <button type="submit" id="save_agreement_btn"
+                class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold">
                 💾 Save Agreement
             </button>
         </div>
