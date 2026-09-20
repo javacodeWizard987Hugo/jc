@@ -150,6 +150,7 @@ class PosController extends Controller
 
 
                'due_day_of_month' => [
+                    'nullable',
                     'required_if:payment_method,installment',
                     'integer',
                     'min:1',

@@ -615,15 +615,15 @@ document.addEventListener('DOMContentLoaded', function () {
         firstDueDateInput.value = formatDate(today);
     }
 
-    // due_day_of_month = +1 calendar month (safe)
+    // due_day_of_month should be day of month integer (1-31)
     const dueDayOfMonthInput = document.getElementById('dueDayOfMonthInput');
     if (dueDayOfMonthInput && !dueDayOfMonthInput.value) {
-        const nextDue = new Date(today);
-        nextDue.setDate(1);                  // 🔒 prevent overflow
-        nextDue.setMonth(nextDue.getMonth() + 1);
-        nextDue.setDate(today.getDate());    // restore day safely
+        dueDayOfMonthInput.value = today.getDate();
+    }
 
-        dueDayOfMonthInput.value = formatDate(nextDue);
+    const dueDayOfMonth = document.getElementById('dueDayOfMonth');
+    if (dueDayOfMonth && !dueDayOfMonth.value) {
+        dueDayOfMonth.value = today.getDate();
     }
 });
 </script>
@@ -1609,7 +1609,14 @@ function completeSale() {
         document.getElementById('numberOfInstallmentsInput').value = document.getElementById('numberOfInstallments').value;
         document.getElementById('monthlyInstallmentAmountInput').value = document.getElementById('monthlyInstallmentAmount').value;
         document.getElementById('firstDueDateInput').value = document.getElementById('firstDueDate').value;
-        document.getElementById('dueDayOfMonthInput').value = document.getElementById('dueDayOfMonth').value;
+        document.getElementById('dueDayOfMonthInput').value = document.getElementById('dueDayOfMonth').value || new Date().getDate();
+    } else {
+        document.getElementById('downPaymentAmountInput').value = '';
+        document.getElementById('downPaymentMethodInput').value = '';
+        document.getElementById('numberOfInstallmentsInput').value = '';
+        document.getElementById('monthlyInstallmentAmountInput').value = '';
+        document.getElementById('firstDueDateInput').value = '';
+        document.getElementById('dueDayOfMonthInput').value = '';
     }
 
     // Refresh CSRF token before submission

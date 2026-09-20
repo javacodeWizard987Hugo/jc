@@ -314,12 +314,6 @@ class InstallmentAgreementController extends Controller
             abort(404, 'Installment agreement not found.');
         }
 
-        $isAdmin = auth()->user()->isAdmin();
-
-        if (!$sale->installmentAgreement->otp_verified_at && !$isAdmin) {
-            return back()->withErrors(['error' => 'Please verify OTP before saving the agreement.']);
-        }
-
         $validated = $request->validate([
       
             'customer_name'           => 'required|string|max:255',
@@ -361,19 +355,19 @@ class InstallmentAgreementController extends Controller
         // Update the installment agreement with all details
         $sale->installmentAgreement->update([
             
-            'customer_age'            => $validated['customer_age'],
-            'customer_occupation'     => $validated['customer_occupation'],
-            'customer_institute_name_address' => $validated['customer_institute_name_address'],
-            'customer_monthly_salary' => $validated['customer_monthly_salary'],
-            'customer_bank_branch'    => $validated['customer_bank_branch'],
+            'customer_age'            => $validated['customer_age'] ?? null,
+            'customer_occupation'     => $validated['customer_occupation'] ?? null,
+            'customer_institute_name_address' => $validated['customer_institute_name_address'] ?? null,
+            'customer_monthly_salary' => $validated['customer_monthly_salary'] ?? null,
+            'customer_bank_branch'    => $validated['customer_bank_branch'] ?? null,
 
             'guarantor_name'          => $validated['guarantor_name'],
             'guarantor_nic'           => $validated['guarantor_nic'],
             'guarantor_address'       => $validated['guarantor_address'],
             'guarantor_mobile_number' => $validated['guarantor_mobile_number'],
-            'guarantor_1_occupation'  => $validated['guarantor_1_occupation'],
-            'guarantor_1_monthly_income' => $validated['guarantor_1_monthly_income'],
-            'guarantor_1_bank_branch' => $validated['guarantor_1_bank_branch'],
+            'guarantor_1_occupation'  => $validated['guarantor_1_occupation'] ?? null,
+            'guarantor_1_monthly_income' => $validated['guarantor_1_monthly_income'] ?? null,
+            'guarantor_1_bank_branch' => $validated['guarantor_1_bank_branch'] ?? null,
 
          
 
@@ -398,22 +392,22 @@ class InstallmentAgreementController extends Controller
                 'name' => $validated['customer_name'],
                 'phone' => $validated['customer_phone'],
                 'nic' => $validated['customer_nic'],
-                'address' => $validated['customer_address'],
+                'address' => $validated['customer_address'] ?? null,
 
-                'customer_age'            => $validated['customer_age'],
-                'customer_occupation'     => $validated['customer_occupation'],
-                'customer_institute_name_address' => $validated['customer_institute_name_address'],
-                'customer_monthly_salary' => $validated['customer_monthly_salary'],
-                'customer_bank_branch'    => $validated['customer_bank_branch'],
+                'customer_age'            => $validated['customer_age'] ?? null,
+                'customer_occupation'     => $validated['customer_occupation'] ?? null,
+                'customer_institute_name_address' => $validated['customer_institute_name_address'] ?? null,
+                'customer_monthly_salary' => $validated['customer_monthly_salary'] ?? null,
+                'customer_bank_branch'    => $validated['customer_bank_branch'] ?? null,
 
                 'guarantor_name'          => $validated['guarantor_name'],
                 'guarantor_nic'           => $validated['guarantor_nic'],
                 'guarantor_mobile_number' => $validated['guarantor_mobile_number'],
                 'guarantor_address'       => $validated['guarantor_address'],
                 
-                'guarantor_1_occupation'  => $validated['guarantor_1_occupation'],
-                'guarantor_1_monthly_income' => $validated['guarantor_1_monthly_income'],
-                'guarantor_1_bank_branch' => $validated['guarantor_1_bank_branch'],
+                'guarantor_1_occupation'  => $validated['guarantor_1_occupation'] ?? null,
+                'guarantor_1_monthly_income' => $validated['guarantor_1_monthly_income'] ?? null,
+                'guarantor_1_bank_branch' => $validated['guarantor_1_bank_branch'] ?? null,
 
             ]);
         }
