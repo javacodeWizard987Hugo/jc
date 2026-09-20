@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Installment Agreement - {{ $sale->invoice_number }}</title>
+    <title>Installment Agreement - <?php echo e($sale->invoice_number); ?></title>
   
     <style>
 /* Reset & Basics */
@@ -175,15 +175,15 @@ body {
 </style>
 </head>
 <body>
-    @php
+    <?php
         $installment = $sale->installmentAgreement;
         $isAdmin = auth()->user()->isAdmin();
-    @endphp
+    ?>
 
     <div class="no-print" style="display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 20px; padding: 10px; background: #f8f9fa; border-bottom: 1px solid #dee2e6;">
         <button onclick="window.print()" style="padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">🖨️ Print Agreement Card</button>
         
-        <a href="{{ route($isAdmin ? 'admin.pos' : 'cashier.pos') }}" 
+        <a href="<?php echo e(route($isAdmin ? 'admin.pos' : 'cashier.pos')); ?>" 
            style="padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; text-decoration: none;">
             ← Back to POS
         </a>
@@ -219,16 +219,16 @@ body {
     <div class="applicant-section">
         <div class="applicant-title">APPLICANT</div>
         <div class="dotted-row">
-            <strong>Name:</strong> <span class="dotted-line" style="min-width: 80%;">{{ $sale->customer->name ?? '' }}</span>
+            <strong>Name:</strong> <span class="dotted-line" style="min-width: 80%;"><?php echo e($sale->customer->name ?? ''); ?></span>
         </div>
         <div class="dotted-row">
-            <strong>Address:</strong> <span class="dotted-line" style="min-width: 80%;">{{ $sale->customer->address ?? '' }}</span>
+            <strong>Address:</strong> <span class="dotted-line" style="min-width: 80%;"><?php echo e($sale->customer->address ?? ''); ?></span>
         </div>
         <div class="dotted-row">
-            <strong>NIC No.:</strong> <span class="dotted-line" style="min-width: 80%;">{{ $sale->customer->nic ?? '' }}</span>
+            <strong>NIC No.:</strong> <span class="dotted-line" style="min-width: 80%;"><?php echo e($sale->customer->nic ?? ''); ?></span>
         </div>
         <div class="dotted-row">
-            <strong>Telephone No.:</strong> <span class="dotted-line" style="min-width: 75%;">{{ $sale->customer->phone ?? '' }}</span>
+            <strong>Telephone No.:</strong> <span class="dotted-line" style="min-width: 75%;"><?php echo e($sale->customer->phone ?? ''); ?></span>
         </div>
         <div style="margin-top: 25px; display: flex; justify-content: flex-end;">
             <div style="text-align: center; width: 250px;">
@@ -241,41 +241,41 @@ body {
     <!-- AGREEMENT DETAILS SECTION -->
     <div class="agreement-details-section">
         <div style="display: flex; justify-content: space-between;" class="dotted-row">
-            <div><strong>Agreement No.:</strong> <span class="dotted-line" style="min-width: 150px;">{{ $installment->agreement_number ?: $sale->invoice_number }}</span></div>
-            <div><strong>Date:</strong> <span class="dotted-line" style="min-width: 150px;">{{ \Carbon\Carbon::parse($sale->created_at)->format('Y-m-d') }}</span></div>
+            <div><strong>Agreement No.:</strong> <span class="dotted-line" style="min-width: 150px;"><?php echo e($installment->agreement_number ?: $sale->invoice_number); ?></span></div>
+            <div><strong>Date:</strong> <span class="dotted-line" style="min-width: 150px;"><?php echo e(\Carbon\Carbon::parse($sale->created_at)->format('Y-m-d')); ?></span></div>
         </div>
 
         <div class="dotted-row">
-            <strong>Name:</strong> <span class="dotted-line" style="min-width: 60%;">{{ $sale->customer->name ?? '' }}</span>
+            <strong>Name:</strong> <span class="dotted-line" style="min-width: 60%;"><?php echo e($sale->customer->name ?? ''); ?></span>
             <span style="font-weight: bold; margin-left: 10px;">Mr./Ms.</span>
         </div>
 
         <div class="dotted-row">
-            <strong>Address:</strong> <span class="dotted-line" style="min-width: 85%;">{{ $sale->customer->address ?? '' }}</span>
+            <strong>Address:</strong> <span class="dotted-line" style="min-width: 85%;"><?php echo e($sale->customer->address ?? ''); ?></span>
         </div>
 
         <div style="display: flex; justify-content: space-between;" class="dotted-row">
-            <div style="width: 48%;"><strong>Telephone No.:</strong> <span class="dotted-line" style="min-width: 60%;">{{ $sale->customer->phone ?? '' }}</span></div>
-            <div style="width: 48%;"><strong>NIC No.:</strong> <span class="dotted-line" style="min-width: 60%;">{{ $sale->customer->nic ?? '' }}</span></div>
+            <div style="width: 48%;"><strong>Telephone No.:</strong> <span class="dotted-line" style="min-width: 60%;"><?php echo e($sale->customer->phone ?? ''); ?></span></div>
+            <div style="width: 48%;"><strong>NIC No.:</strong> <span class="dotted-line" style="min-width: 60%;"><?php echo e($sale->customer->nic ?? ''); ?></span></div>
         </div>
 
         <div class="dotted-row">
             <strong>Goods/Item:</strong> 
             <span class="dotted-line" style="min-width: 80%;">
-                @foreach($sale->items as $item)
-                    {{ $item->item->name }}@if(!$loop->last), @endif
-                @endforeach
+                <?php $__currentLoopData = $sale->items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php echo e($item->item->name); ?><?php if(!$loop->last): ?>, <?php endif; ?>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </span>
         </div>
 
         <div style="display: flex; justify-content: space-between;" class="dotted-row">
-            <div style="width: 48%;"><strong>Initial Payment:</strong> <span class="dotted-line" style="min-width: 50%;">Rs. {{ number_format($installment->down_payment_amount ?? 0, 2) }}</span></div>
-            <div style="width: 48%;"><strong>Total Value:</strong> <span class="dotted-line" style="min-width: 50%;">Rs. {{ number_format($sale->total_amount ?? 0, 2) }}</span></div>
+            <div style="width: 48%;"><strong>Initial Payment:</strong> <span class="dotted-line" style="min-width: 50%;">Rs. <?php echo e(number_format($installment->down_payment_amount ?? 0, 2)); ?></span></div>
+            <div style="width: 48%;"><strong>Total Value:</strong> <span class="dotted-line" style="min-width: 50%;">Rs. <?php echo e(number_format($sale->total_amount ?? 0, 2)); ?></span></div>
         </div>
 
         <div class="dotted-row">
             <strong>Monthly Instalment and No. of Instalments:</strong> 
-            <span class="dotted-line" style="min-width: 50%;">Rs. {{ number_format($installment->monthly_installment_amount ?? 0, 2) }} x {{ $installment->number_of_installments ?? 0 }} Months</span>
+            <span class="dotted-line" style="min-width: 50%;">Rs. <?php echo e(number_format($installment->monthly_installment_amount ?? 0, 2)); ?> x <?php echo e($installment->number_of_installments ?? 0); ?> Months</span>
         </div>
     </div>
 
@@ -294,25 +294,25 @@ body {
             </tr>
         </thead>
         <tbody>
-            @php
+            <?php
                 $payments = $installment ? $installment->payments : collect();
                 $totalRows = max(12, count($payments));
-            @endphp
-            @for ($i = 0; $i < $totalRows; $i++)
-                @php
+            ?>
+            <?php for($i = 0; $i < $totalRows; $i++): ?>
+                <?php
                     $p = $payments[$i] ?? null;
-                @endphp
+                ?>
                 <tr>
-                    <td>{{ $p ? \Carbon\Carbon::parse($p->payment_date)->format('Y-m-d') : '' }}</td>
-                    <td>{{ $p ? ($p->receipt_number ?? $p->id) : '' }}</td>
+                    <td><?php echo e($p ? \Carbon\Carbon::parse($p->payment_date)->format('Y-m-d') : ''); ?></td>
+                    <td><?php echo e($p ? ($p->receipt_number ?? $p->id) : ''); ?></td>
                     <td></td>
                     <td></td>
-                    <td>{{ $p ? number_format($p->amount, 2) : '' }}</td>
+                    <td><?php echo e($p ? number_format($p->amount, 2) : ''); ?></td>
                     <td></td>
-                    <td>{{ $p ? number_format($p->balance_after ?? 0, 2) : '' }}</td>
+                    <td><?php echo e($p ? number_format($p->balance_after ?? 0, 2) : ''); ?></td>
                     <td></td>
                 </tr>
-            @endfor
+            <?php endfor; ?>
         </tbody>
     </table>
 
@@ -321,9 +321,10 @@ body {
         This card must be produced when making any payment. (The Company will not be responsible for payments made without a receipt.)
     </div>
     <div class="landmark-box">
-        Land Mark:- <span class="dotted-line" style="min-width: 80%;">{{ $sale->customer->landmark ?? '' }}</span>
+        Land Mark:- <span class="dotted-line" style="min-width: 80%;"><?php echo e($sale->customer->landmark ?? ''); ?></span>
     </div>
 
 </div>
 </body>
 </html>
+<?php /**PATH E:\jc\resources\views/admin/installments/proposal-agreement.blade.php ENDPATH**/ ?>

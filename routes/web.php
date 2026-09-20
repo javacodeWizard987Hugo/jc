@@ -22,6 +22,14 @@ use App\Http\Controllers\Admin\CustomerHistoryController;
 
 use App\Services\SmsService;
 
+
+use App\Models\Sale;
+
+Route::get('/proposal-agreement/{id}', function ($id) {
+    $sale = Sale::findOrFail($id);
+
+    return view('admin.installments.proposal-agreement', compact('sale'));
+});
 Route::post(
     '/installments/{agreement}/nic-files',
     [InstallmentAgreementController::class, 'updateNicFiles']
