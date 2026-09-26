@@ -146,16 +146,15 @@ class PosController extends Controller
             'down_payment_amount' => 'nullable|numeric|min:0|required_if:payment_method,installment',
             'number_of_installments' => 'nullable|integer|min:1|required_if:payment_method,installment',
             'monthly_installment_amount' => 'nullable|numeric|min:0|required_if:payment_method,installment',
-           'first_due_date' => 'required_if:payment_method,installment|date',
+           'first_due_date' => 'nullable|required_if:payment_method,installment|date',
 
-
-               'due_day_of_month' => [
-                    'nullable',
-                    'required_if:payment_method,installment',
-                    'integer',
-                    'min:1',
-                    'max:31',
-                ],
+            'due_day_of_month' => [
+                'nullable',
+                'required_if:payment_method,installment',
+                'integer',
+                'min:1',
+                'max:31',
+            ],
 
             'interest_service_charge' => 'nullable|numeric|min:0',
             'customer_name' => 'nullable|string',
