@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="container-fluid">
 
     <div class="card border-danger shadow-sm">
@@ -12,10 +10,10 @@
 
         <div class="card-body">
 
-            {{-- 🔍 Search & Filter --}}
+            
             <div class="card border-0 shadow-sm mb-4 bg-light">
                 <div class="card-body">
-                    <form method="GET" action="{{ auth()->user()->isAdmin() ? route('admin.warranties.index') : route('cashier.warranties.index') }}">
+                    <form method="GET" action="<?php echo e(auth()->user()->isAdmin() ? route('admin.warranties.index') : route('cashier.warranties.index')); ?>">
                         <div class="row g-3 align-items-center">
 
                             <div class="col-md-7">
@@ -29,7 +27,7 @@
                                         name="search"
                                         class="form-control border-danger"
                                         placeholder="Serial No | Invoice No | Customer Name / NIC / Phone | Item / Model"
-                                        value="{{ request('search') }}"
+                                        value="<?php echo e(request('search')); ?>"
                                     >
                                 </div>
                             </div>
@@ -38,11 +36,12 @@
                                 <label class="form-label fw-semibold">Branch</label>
                                 <select name="branch_id" class="form-select border-danger">
                                     <option value="">All Branches</option>
-                                    @foreach($branches as $branch)
-                                        <option value="{{ $branch->id }}" {{ request('branch_id') == $branch->id ? 'selected' : '' }}>
-                                            {{ $branch->name }}
+                                    <?php $__currentLoopData = $branches; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $branch): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($branch->id); ?>" <?php echo e(request('branch_id') == $branch->id ? 'selected' : ''); ?>>
+                                            <?php echo e($branch->name); ?>
+
                                         </option>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
 
@@ -57,7 +56,7 @@
                 </div>
             </div>
 
-            {{-- 📋 Table --}}
+            
             <div class="table-responsive">
                 <table class="table table-hover align-middle border">
                     <thead class="table-danger text-center">
@@ -74,84 +73,91 @@
                     </thead>
 
                     <tbody>
-                        @forelse($warranties as $warranty)
+                        <?php $__empty_1 = true; $__currentLoopData = $warranties; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $warranty): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <tr>
                                 <td>
-                                    <strong>{{ $warranty->serialNumber->item->name ?? 'N/A' }}</strong>
-                                    @if(!empty($warranty->serialNumber->item->item_code))
-                                        <div class="text-muted small">Code: {{ $warranty->serialNumber->item->item_code }}</div>
-                                    @endif
+                                    <strong><?php echo e($warranty->serialNumber->item->name ?? 'N/A'); ?></strong>
+                                    <?php if(!empty($warranty->serialNumber->item->item_code)): ?>
+                                        <div class="text-muted small">Code: <?php echo e($warranty->serialNumber->item->item_code); ?></div>
+                                    <?php endif; ?>
                                 </td>
                                 <td>
                                     <span class="badge bg-dark fs-6">
-                                        {{ $warranty->serialNumber->serial_number ?? 'N/A' }}
+                                        <?php echo e($warranty->serialNumber->serial_number ?? 'N/A'); ?>
+
                                     </span>
                                 </td>
                                 <td>
-                                    <strong>{{ $warranty->customer->name ?? 'Walk-in Customer' }}</strong>
-                                    @if(!empty($warranty->customer->nic))
-                                        <div class="text-muted small">NIC: {{ $warranty->customer->nic }}</div>
-                                    @endif
-                                    @if(!empty($warranty->customer->phone))
-                                        <div class="text-muted small">Phone: {{ $warranty->customer->phone }}</div>
-                                    @endif
+                                    <strong><?php echo e($warranty->customer->name ?? 'Walk-in Customer'); ?></strong>
+                                    <?php if(!empty($warranty->customer->nic)): ?>
+                                        <div class="text-muted small">NIC: <?php echo e($warranty->customer->nic); ?></div>
+                                    <?php endif; ?>
+                                    <?php if(!empty($warranty->customer->phone)): ?>
+                                        <div class="text-muted small">Phone: <?php echo e($warranty->customer->phone); ?></div>
+                                    <?php endif; ?>
                                 </td>
                                 <td>
                                     <span class="text-primary fw-bold">
-                                        {{ $warranty->saleItem->sale->invoice_number ?? 'N/A' }}
+                                        <?php echo e($warranty->saleItem->sale->invoice_number ?? 'N/A'); ?>
+
                                     </span>
-                                    @if(!empty($warranty->saleItem->sale->created_at))
-                                        <div class="text-muted small">{{ $warranty->saleItem->sale->created_at->format('d M Y') }}</div>
-                                    @endif
+                                    <?php if(!empty($warranty->saleItem->sale->created_at)): ?>
+                                        <div class="text-muted small"><?php echo e($warranty->saleItem->sale->created_at->format('d M Y')); ?></div>
+                                    <?php endif; ?>
                                 </td>
                                 <td>
-                                    {{ $warranty->saleItem->sale->branch->name ?? 'Main Branch' }}
+                                    <?php echo e($warranty->saleItem->sale->branch->name ?? 'Main Branch'); ?>
+
                                 </td>
                                 <td>
-                                    <div>{{ \Carbon\Carbon::parse($warranty->start_date)->format('d M Y') }}</div>
-                                    <span class="badge bg-info text-dark">{{ $warranty->duration }} Months</span>
+                                    <div><?php echo e(\Carbon\Carbon::parse($warranty->start_date)->format('d M Y')); ?></div>
+                                    <span class="badge bg-info text-dark"><?php echo e($warranty->duration); ?> Months</span>
                                 </td>
                                 <td>
-                                    @php
+                                    <?php
                                         $isExpired = \Carbon\Carbon::parse($warranty->expiry_date)->isPast();
-                                    @endphp
-                                    <span class="badge {{ $isExpired ? 'bg-danger' : 'bg-success' }} fs-6">
-                                        {{ \Carbon\Carbon::parse($warranty->expiry_date)->format('d M Y') }}
+                                    ?>
+                                    <span class="badge <?php echo e($isExpired ? 'bg-danger' : 'bg-success'); ?> fs-6">
+                                        <?php echo e(\Carbon\Carbon::parse($warranty->expiry_date)->format('d M Y')); ?>
+
                                     </span>
-                                    @if($isExpired)
+                                    <?php if($isExpired): ?>
                                         <div class="text-danger small fw-bold mt-1">Expired</div>
-                                    @else
+                                    <?php else: ?>
                                         <div class="text-success small fw-bold mt-1">Active</div>
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
                                 <td class="text-center">
-                                    @php
+                                    <?php
                                         $showRoute = auth()->user()->isAdmin()
                                             ? route('admin.warranties.show', $warranty->id)
                                             : route('cashier.warranties.show', $warranty->id);
-                                    @endphp
-                                    <a href="{{ $showRoute }}" class="btn btn-sm btn-outline-danger">
+                                    ?>
+                                    <a href="<?php echo e($showRoute); ?>" class="btn btn-sm btn-outline-danger">
                                         👁️ View Details
                                     </a>
                                 </td>
                             </tr>
-                        @empty
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <tr>
                                 <td colspan="8" class="text-center text-muted py-4">
                                     No warranty records found.
                                 </td>
                             </tr>
-                        @endforelse
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
 
-            {{-- 📄 Pagination --}}
+            
             <div class="d-flex justify-content-end mt-3">
-                {{ $warranties->links('pagination::bootstrap-5') }}
+                <?php echo e($warranties->links('pagination::bootstrap-5')); ?>
+
             </div>
 
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH E:\jc\resources\views/admin/warranties/index.blade.php ENDPATH**/ ?>

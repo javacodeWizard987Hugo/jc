@@ -1034,17 +1034,22 @@
                         <span class="nav-item-icon">📈</span>
                         <span class="nav-item-text">Sales Report</span>
                     </a>
-                  <!--  <a href="{{ route('admin.warranties.index') }}"
+                    <div class="text-red-200 text-xs font-semibold px-4 py-2 mt-4 mb-2 uppercase tracking-wider">Warranty Management</div>
+                    <a href="{{ route('admin.warranties.index') }}"
                         class="nav-item {{ request()->routeIs('admin.warranties.*') ? 'active' : '' }}">
-                            <span class="nav-item-icon">📄</span>
-                            <span class="nav-item-text">Warranties</span>
-                        </a>
-
-                        <a href="{{ route('admin.warranty-jobs.index') }}"
+                        <span class="nav-item-icon">🛡️</span>
+                        <span class="nav-item-text">Warranty Register</span>
+                    </a>
+                    <a href="{{ route('admin.warranty-jobs.index') }}"
                         class="nav-item {{ request()->routeIs('admin.warranty-jobs.*') ? 'active' : '' }}">
-                            <span class="nav-item-icon">🛠</span>
-                            <span class="nav-item-text">Warranty Jobs</span>-->
-                        </a>
+                        <span class="nav-item-icon">🛠️</span>
+                        <span class="nav-item-text">Warranty Jobs</span>
+                    </a>
+                    <a href="{{ route('admin.reports.warranty-jobs') }}"
+                        class="nav-item {{ request()->routeIs('admin.reports.warranty-jobs') ? 'active' : '' }}">
+                        <span class="nav-item-icon">📊</span>
+                        <span class="nav-item-text">Warranty Job Report</span>
+                    </a>
                     <a href="{{ route('admin.reports.stock') }}" class="nav-item {{ request()->routeIs('admin.reports.stock') ? 'active' : '' }}">
                         <span class="nav-item-icon">📦</span>
                         <span class="nav-item-text">Stock Report</span>
@@ -1216,10 +1221,15 @@
                             <span class="nav-item-icon">💰</span>
                             <span class="nav-item-text">Expenses Report</span>
                         </a>
-                        <a href="{{ route('cashier.warranty.index') }}" class="nav-item {{ request()->routeIs('cashier.warranty.*') ? 'active' : '' }}">
-    <span class="nav-item-icon">🛡️</span>
-    <span class="nav-item-text">Warranty Management</span>
-</a>
+                        <div class="text-red-200 text-xs font-semibold px-4 py-2 mt-4 mb-2 uppercase tracking-wider">Warranty Management</div>
+                        <a href="{{ route('cashier.warranties.index') }}" class="nav-item {{ request()->routeIs('cashier.warranties.*') ? 'active' : '' }}">
+                            <span class="nav-item-icon">🛡️</span>
+                            <span class="nav-item-text">Warranty Register</span>
+                        </a>
+                        <a href="{{ route('cashier.warranty-jobs.index') }}" class="nav-item {{ request()->routeIs('cashier.warranty-jobs.*') ? 'active' : '' }}">
+                            <span class="nav-item-icon">🛠️</span>
+                            <span class="nav-item-text">Warranty Jobs</span>
+                        </a>
                     @endif
 
                     @if(auth()->user()->hasPermission('audit_logs'))

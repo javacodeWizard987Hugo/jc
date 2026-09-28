@@ -9,12 +9,22 @@ class WarrantyJob extends Model
 {
     use HasFactory;
 
-    const STATUSES = ['Received', 'Sent to Service Center', 'Under Repair', 'Returned to Branch', 'Ready for Collection', 'Collected', 'Rejected', 'Replaced'];
+    const STATUSES = [
+        'Received',
+        'Sent to Service Center / Supplier',
+        'Under Repair',
+        'Returned to Branch',
+        'Ready for Collection',
+        'Collected',
+        'Rejected / Not Covered',
+        'Replaced'
+    ];
 
     protected $fillable = [
         'job_number',
         'warranty_id',
         'branch_id',
+        'claim_date',
         'problem_description',
         'claim_type',
         'status',
@@ -23,6 +33,11 @@ class WarrantyJob extends Model
         'collected_by_name',
         'collected_by_id',
         'collected_at',
+    ];
+
+    protected $casts = [
+        'claim_date' => 'date',
+        'collected_at' => 'datetime',
     ];
 
     public function warranty()

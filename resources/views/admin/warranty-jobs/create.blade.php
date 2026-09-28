@@ -1,106 +1,91 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-3xl mx-auto px-4 py-6">
+<div class="container-fluid">
+    <div class="card border-danger shadow-sm col-md-10 mx-auto">
+        <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center py-3">
+            <h4 class="mb-0 fw-bold">
+                🛠️ Create Warranty Claim Job
+            </h4>
+            @php
+                $backRoute = auth()->user()->isAdmin() ? route('admin.warranty-jobs.index') : route('cashier.warranty-jobs.index');
+            @endphp
+            <a href="{{ $backRoute }}" class="btn btn-light btn-sm fw-bold">
+                ⬅️ Back to Jobs List
+            </a>
+        </div>
 
-    <div class="bg-white shadow rounded-lg p-6">
-        <!-- Page Title -->
-        <h1 class="text-xl font-semibold text-red-600 mb-6">
-            Create Warranty Job
-        </h1>
+        <div class="card-body p-4">
+            <form method="POST" action="{{ auth()->user()->isAdmin() ? route('admin.warranty-jobs.store') : route('cashier.warranty-jobs.store') }}">
+                @csrf
 
-        <form action="{{ route('admin.warranty-jobs.store') }}" method="POST" class="space-y-5">
-            @csrf
+                <div class="row g-3">
+                    {{-- Select Warranty Item --}}
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold">Select Warranty Item / Serial Number <span class="text-danger">*</span></label>
+                        <select name="warranty_id" class="form-select border-danger" required id="warranty_id_select">
+                            <option value="">-- Select Warranty Record --</option>
+                            @foreach($warranties as $warranty)
+                                <option value="{{ $warranty->id }}" {{ request('warranty_id') == $warranty->id ? 'selected' : '' }}>
+                                    Item: {{ $warranty->serialNumber->item->name ?? 'N/A' }} | 
+                                    S/N: {{ $warranty->serialNumber->serial_number ?? 'N/A' }} | 
+                                    Inv #: {{ $warranty->saleItem->sale->invoice_number ?? 'N/A' }} | 
+                                    Customer: {{ $warranty->customer->name ?? 'N/A' }} ({{ $warranty->customer->nic ?? 'No NIC' }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
-            <!-- Warranty -->
-            <div>
-                <label for="warranty_id"
-                    class="block text-sm font-semibold text-red-600 mb-1">
-                    Warranty <span class="text-red-500">*</span>
-                </label>
-                <select name="warranty_id" id="warranty_id"
-                    class="w-full rounded-md border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200"
-                    required>
-                    <option value="">Select a Warranty</option>
-                    @foreach($warranties as $warranty)
-                        <option value="{{ $warranty->id }}">
-                            {{ $warranty->serialNumber->item->name }}
-                            ({{ $warranty->serialNumber->serial_number }})
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+                    {{-- Receiving Branch --}}
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Branch Receiving Claim <span class="text-danger">*</span></label>
+                        <select name="branch_id" class="form-select border-danger" required>
+                            <option value="">-- Select Branch --</option>
+                            @foreach($branches as $branch)
+                                <option value="{{ $branch->id }}" {{ (auth()->user()->branch_id == $branch->id || old('branch_id') == $branch->id) ? 'selected' : '' }}>
+                                    {{ $branch->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
-            <!-- Branch -->
-            <div>
-                <label for="branch_id"
-                    class="block text-sm font-semibold text-red-600 mb-1">
-                    Branch <span class="text-red-500">*</span>
-                </label>
-                <select name="branch_id" id="branch_id"
-                    class="w-full rounded-md border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200"
-                    required>
-                    <option value="">Select a Branch</option>
-                    @foreach($branches as $branch)
-                        <option value="{{ $branch->id }}">{{ $branch->name }}</option>
-                    @endforeach
-                </select>
-            </div>
+                    {{-- Claim Date --}}
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Claim Date <span class="text-danger">*</span></label>
+                        <input type="date" name="claim_date" class="form-control border-danger" value="{{ old('claim_date', now()->format('Y-m-d')) }}" required>
+                    </div>
 
-            <!-- Problem Description -->
-            <div>
-                <label for="problem_description"
-                    class="block text-sm font-semibold text-red-600 mb-1">
-                    Problem Description <span class="text-red-500">*</span>
-                </label>
-                <textarea
-                    name="problem_description"
-                    id="problem_description"
-                    rows="4"
-                    class="w-full rounded-md border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 resize-none"
-                    placeholder="Describe the customer reported issue..."
-                    required></textarea>
-            </div>
+                    {{-- Claim Type --}}
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Claim Type <span class="text-danger">*</span></label>
+                        <select name="claim_type" class="form-select border-danger" required>
+                            <option value="repair" {{ old('claim_type') == 'repair' ? 'selected' : '' }}>Repair</option>
+                            <option value="replacement" {{ old('claim_type') == 'replacement' ? 'selected' : '' }}>Replacement</option>
+                            <option value="inspection" {{ old('claim_type') == 'inspection' ? 'selected' : '' }}>Inspection Only</option>
+                        </select>
+                    </div>
 
-            <!-- Claim Type -->
-            <div>
-                <label for="claim_type"
-                    class="block text-sm font-semibold text-red-600 mb-1">
-                    Claim Type <span class="text-red-500">*</span>
-                </label>
-                <select name="claim_type" id="claim_type"
-                    class="w-full rounded-md border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200"
-                    required>
-                    <option value="repair">Repair</option>
-                    <option value="replacement">Replacement</option>
-                    <option value="inspection">Inspection</option>
-                </select>
-            </div>
+                    {{-- Problem Description --}}
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold">Problem Description <span class="text-danger">*</span></label>
+                        <textarea name="problem_description" class="form-control border-danger" rows="3" placeholder="Describe the fault reported by customer..." required>{{ old('problem_description') }}</textarea>
+                    </div>
 
-            <!-- Remarks -->
-            <div>
-                <label for="remarks"
-                    class="block text-sm font-semibold text-red-600 mb-1">
-                    Remarks (Optional)
-                </label>
-                <textarea
-                    name="remarks"
-                    id="remarks"
-                    rows="3"
-                    class="w-full rounded-md border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 resize-none"
-                    placeholder="Any additional notes..."></textarea>
-            </div>
+                    {{-- Remarks --}}
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold">Remarks / Notes</label>
+                        <textarea name="remarks" class="form-control" rows="2" placeholder="Optional notes...">{{ old('remarks') }}</textarea>
+                    </div>
 
-            <!-- Submit -->
-            <div class="flex justify-end pt-4">
-                <button type="submit"
-                    class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition">
-                    Create Job
-                </button>
-            </div>
+                    <div class="col-12 mt-4 text-end">
+                        <button type="submit" class="btn btn-danger btn-lg px-5 fw-bold">
+                            ➕ Create Warranty Job
+                        </button>
+                    </div>
 
-        </form>
+                </div>
+            </form>
+        </div>
     </div>
-
 </div>
 @endsection

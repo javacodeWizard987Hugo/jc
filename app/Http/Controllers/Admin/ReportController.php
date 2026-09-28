@@ -1664,13 +1664,20 @@ class ReportController extends Controller
 
     public function warrantyJobs(Request $request)
     {
-        $query = \App\Models\WarrantyJob::with(['warranty.serialNumber.item', 'branch', 'creator']);
+        $query = \App\Models\WarrantyJob::with([
+            'warranty.serialNumber.item.category',
+            'warranty.serialNumber.item.supplier',
+            'warranty.saleItem.sale',
+            'warranty.customer',
+            'branch',
+            'creator'
+        ]);
 
         if ($request->filled('start_date')) {
-            $query->whereDate('created_at', '>=', $request->input('start_date'));
+            $query->whereDate('claim_date', '>=', $request->input('start_date'));
         }
         if ($request->filled('end_date')) {
-            $query->whereDate('created_at', '<=', $request->input('end_date'));
+            $query->whereDate('claim_date', '<=', $request->input('end_date'));
         }
         if ($request->filled('branch_id')) {
             $query->where('branch_id', $request->input('branch_id'));
@@ -1678,13 +1685,30 @@ class ReportController extends Controller
         if ($request->filled('status')) {
             $query->where('status', $request->input('status'));
         }
+        if ($request->filled('item_id')) {
+            $query->whereHas('warranty.serialNumber', function ($q) use ($request) {
+                $q->where('item_id', $request->input('item_id'));
+            });
+        }
+        if ($request->filled('category_id')) {
+            $query->whereHas('warranty.serialNumber.item', function ($q) use ($request) {
+                $q->where('category_id', $request->input('category_id'));
+            });
+        }
+        if ($request->filled('supplier_id')) {
+            $query->whereHas('warranty.serialNumber.item', function ($q) use ($request) {
+                $q->where('supplier_id', $request->input('supplier_id'));
+            });
+        }
 
         $jobs = $query->latest()->paginate(20);
         $branches = \App\Models\Branch::all();
         $statuses = \App\Models\WarrantyJob::STATUSES;
+        $categories = \App\Models\Category::all();
+        $suppliers = \App\Models\Supplier::all();
+        $items = \App\Models\Item::all();
 
-
-        return view('admin.reports.warranty-jobs', compact('jobs', 'branches', 'statuses'));
+        return view('admin.reports.warranty-jobs', compact('jobs', 'branches', 'statuses', 'categories', 'suppliers', 'items'));
     }
 
     public function stockByLocation(Request $request)
