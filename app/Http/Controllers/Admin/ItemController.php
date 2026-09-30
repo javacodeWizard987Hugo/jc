@@ -72,13 +72,12 @@ class ItemController extends Controller
             'unit_of_measure' => 'required|string|in:pcs',
             'cost_price' => 'required|numeric|min:0',
             'selling_price' => 'required|numeric|min:0',
+            'retail_price' => 'nullable|numeric|min:0',
             'reorder_level' => 'required|numeric|min:0',
             'current_stock' => 'required|numeric|min:0',
         
             'supplier_id' => 'nullable|exists:suppliers,id',
             'is_active' => 'required|boolean',
-            'emi_lock_mode' => 'nullable|string',
-            'emi_number' => 'nullable|integer',
         ]);
 
         $initialStock = (int) $validated['current_stock'];
@@ -168,6 +167,7 @@ class ItemController extends Controller
             'unit_of_measure' => 'required|string|in:pcs',
             'cost_price' => 'required|numeric|min:0',
             'selling_price' => 'required|numeric|min:0',
+            'retail_price' => 'nullable|numeric|min:0',
             'reorder_level' => 'required|numeric|min:0',
             'current_stock' => 'required|numeric|min:0',
           
@@ -175,8 +175,6 @@ class ItemController extends Controller
             'is_active' => 'boolean',
             'requires_serial_number' => 'nullable|boolean',
             'warranty_duration_months' => 'nullable|integer|min:0',
-            'emi_lock_mode' => 'nullable|string',
-            'emi_number' => 'nullable|integer',
         ]);
 
         $oldValues = $item->toArray();

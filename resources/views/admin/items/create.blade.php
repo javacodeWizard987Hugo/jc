@@ -70,7 +70,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                 <div>
                     <label for="cost_price" class="form-label">Cost Price (Per PCS) *</label>
                     <input type="number" step="0.01" name="cost_price" id="cost_price" required
@@ -85,6 +85,15 @@
                     <input type="number" step="0.01" name="selling_price" id="selling_price" required
                            class="form-input" value="{{ old('selling_price') }}">
                     @error('selling_price')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="retail_price" class="form-label">Retail Price (Per PCS)</label>
+                    <input type="number" step="0.01" name="retail_price" id="retail_price"
+                           class="form-input" value="{{ old('retail_price') }}">
+                    @error('retail_price')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
@@ -121,19 +130,6 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                    <label for="emi_lock_mode" class="form-label">EMI Lock Mode</label>
-                    <input type="text" name="emi_lock_mode" id="emi_lock_mode"
-                           class="form-input" value="{{ old('emi_lock_mode') }}">
-                </div>
-
-                <div>
-                    <label for="emi_number" class="form-label">EMI Number</label>
-                    <input type="number" name="emi_number" id="emi_number"
-                           class="form-input" value="{{ old('emi_number') }}">
-                </div>
-            </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                  <div class="md:col-span-2">
