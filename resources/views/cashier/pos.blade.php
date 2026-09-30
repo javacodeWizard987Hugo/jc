@@ -241,7 +241,7 @@ console.log('Route prefix from server:', '{{ $routePrefix }}');
                                 {{-- Annual Interest % --}}
                                 <div>
                                     <label class="text-sm font-medium text-gray-700">Interest %</label>
-                                    <input type="number" id="annualInterestPercent" value="0"
+                                    <input type="number" id="annualInterestPercent" value="42"
                                         class="mt-1 w-full rounded-md border-gray-300"
                                         oninput="calculateInstallment()">
                                 </div>
@@ -539,55 +539,40 @@ function roundMoney(value) {
 function calculateInstallment() {
     // Inputs from form
     const itemPrice = parseFloat(document.getElementById('itemPrice').value) || 0;
-     const downPaymentType = document.getElementById('downPaymentType').value;
-    const downPaymentValue = parseFloat(document.getElementById('downPaymentValue').value) || 30;
+    const downPaymentType = document.getElementById('downPaymentType').value;
+    const downPaymentValue = parseFloat(document.getElementById('downPaymentValue').value) || 0;
     const annualInterestPercent = parseFloat(document.getElementById('annualInterestPercent').value) || 0;
     const months = parseInt(document.getElementById('paymentMonths').value) || 6;
-    const otherCharges = parseFloat(document.getElementById('otherCharges').value) || 0; // This is treated as a MONTHLY charge
+    const otherCharges = parseFloat(document.getElementById('otherCharges').value) || 0;
 
     /* STEP 1: Down Payment */
-      let downPaymentAmount = 0;
+    let downPaymentAmount = 0;
     if (downPaymentType === 'percent') {
         downPaymentAmount = itemPrice * (downPaymentValue / 100);
     } else {
         downPaymentAmount = downPaymentValue;
     }
 
-    /* STEP 2: Loan Amount */
-    const loanAmount = itemPrice - downPaymentAmount;
+    /* STEP 2: Loan Amount (Price minus Down Payment) */
+    const loanAmount = Math.max(0, itemPrice - downPaymentAmount);
 
-    /* STEP 3: Monthly Interest Rate */
-    const monthlyInterestRate = (annualInterestPercent / 100) / 12;
+    /* STEP 3: Interest applied to Total Item Price */
+    const totalInterest = itemPrice * (annualInterestPercent / 100) * (months / 12);
+    const monthlyInterest = months > 0 ? totalInterest / months : 0;
 
-    /* STEP 4: Calculate EMI (Equated Monthly Installment for the loan part) */
-    let emi = 0;
-    if (monthlyInterestRate > 0 && months > 0) {
-        const r = monthlyInterestRate;
-        const n = months;
-        const p = loanAmount;
-        emi = p * r * (Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1));
-    } else if (months > 0) {
-        emi = loanAmount / months; // 0 interest loan
-    }
-
-
-       /* STEP 5: Total Monthly Payment */
+    /* STEP 4: Total Payable & Monthly Payment */
+    const totalPayable = itemPrice + totalInterest + otherCharges;
+    const remainingBalance = Math.max(0, totalPayable - downPaymentAmount);
+    const monthlyTotalPayment = months > 0 ? remainingBalance / months : 0;
     const monthlyOtherCharges = months > 0 ? otherCharges / months : 0;
-    const monthlyTotalPayment = emi + monthlyOtherCharges; // Add monthly other 
-    
-    /* STEP 6: Total Payable (Total of all payments customer makes) */
-    const totalPayable = (monthlyTotalPayment * months) + downPaymentAmount;
-    
-    /* STEP 7: Total Interest */
-    const totalInterest = (emi * months) - loanAmount;
 
     /* OUTPUTS — ROUND ONLY HERE */
     document.getElementById('calcDownPaymentAmount').value = roundMoney(downPaymentAmount);
     document.getElementById('loanAmount').value = roundMoney(loanAmount);
     document.getElementById('annualInterestValue').value = roundMoney(totalInterest);
-    document.getElementById('monthlyInterest').value = roundMoney(emi); // This field now shows the EMI (loan part only)
-    document.getElementById('monthlyOtherCharges').value = roundMoney(otherCharges); // This field shows the monthly other charges
-    document.getElementById('monthlyTotalPayment').value = Math.ceil(monthlyTotalPayment); // This is the final monthly bill
+    document.getElementById('monthlyInterest').value = roundMoney(monthlyInterest);
+    document.getElementById('monthlyOtherCharges').value = roundMoney(monthlyOtherCharges);
+    document.getElementById('monthlyTotalPayment').value = Math.ceil(monthlyTotalPayment);
     document.getElementById('totalPayable').value = Math.ceil(totalPayable);
 
     /* SYNC TO INSTALLMENT FIELDS in the main checkout form */

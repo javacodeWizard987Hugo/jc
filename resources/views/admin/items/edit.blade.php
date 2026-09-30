@@ -56,7 +56,7 @@
             </div>
 
             {{-- Prices --}}
-            <div class="grid grid-cols-2 gap-4 mb-4">
+            <div class="grid grid-cols-3 gap-4 mb-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Cost Price *</label>
                     <input type="number" step="0.01" min="0" name="cost_price" required
@@ -69,6 +69,13 @@
                     <input type="number" step="0.01" min="0" name="selling_price" required
                            class="mt-1 w-full border rounded px-3 py-2"
                            value="{{ old('selling_price', $item->selling_price) }}">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Retail Price</label>
+                    <input type="number" step="0.01" min="0" name="retail_price"
+                           class="mt-1 w-full border rounded px-3 py-2"
+                           value="{{ old('retail_price', $item->retail_price) }}">
                 </div>
             </div>
 
@@ -85,22 +92,6 @@
                     <input type="number" min="0" name="reorder_level"
                            class="mt-1 w-full border rounded px-3 py-2"
                            value="{{ old('reorder_level', $item->reorder_level) }}">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">EMI Lock Mode</label>
-                    <input type="text" name="emi_lock_mode"
-                           class="mt-1 w-full border rounded px-3 py-2"
-                           value="{{ old('emi_lock_mode', $item->emi_lock_mode) }}">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">EMI Number</label>
-                    <input type="number" name="emi_number"
-                           class="mt-1 w-full border rounded px-3 py-2"
-                           value="{{ old('emi_number', $item->emi_number) }}">
                 </div>
             </div>
 
