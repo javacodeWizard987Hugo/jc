@@ -384,16 +384,22 @@ Route::middleware(['auth', 'role:cashier'])->prefix('cashier')->name('cashier.')
         Route::resource('suppliers', \App\Http\Controllers\Admin\SupplierController::class);
     });
     
-    // Reports
-    Route::middleware('permission:reports')->prefix('reports')->name('reports.')->group(function () {
-        Route::get('/sales', [ReportController::class, 'sales'])->name('sales');
-        Route::get('/stock', [ReportController::class, 'stock'])->name('stock');
-        Route::get('/supplier-ledger', [ReportController::class, 'supplierLedger'])->name('supplier-ledger');
-        Route::get('/supplier-ledger-api', [ReportController::class, 'supplierLedgerApi'])->name('supplier-ledger-api');
-        Route::get('/expenses', [ReportController::class, 'expenses'])->name('expenses');
-        Route::get('/export/{type}', [ReportController::class, 'export'])->name('export');
-        Route::get('/daily-installments', [ReportController::class, 'dailyInstallments'])->name('daily-installments');
-        Route::get('/daily-installment-income', [ReportController::class, 'dailyInstallmentIncome'])->name('daily-installment-income');
+    // Reports & Warranty Management
+    Route::middleware('permission:reports')->group(function () {
+        Route::resource('warranties', WarrantyController::class)->only(['index', 'show']);
+        Route::resource('warranty-jobs', WarrantyJobController::class);
+        Route::post('/warranty-jobs/{id}/collect', [WarrantyJobController::class, 'collect'])->name('warranty-jobs.collect');
+
+        Route::prefix('reports')->name('reports.')->group(function () {
+            Route::get('/sales', [ReportController::class, 'sales'])->name('sales');
+            Route::get('/stock', [ReportController::class, 'stock'])->name('stock');
+            Route::get('/supplier-ledger', [ReportController::class, 'supplierLedger'])->name('supplier-ledger');
+            Route::get('/supplier-ledger-api', [ReportController::class, 'supplierLedgerApi'])->name('supplier-ledger-api');
+            Route::get('/expenses', [ReportController::class, 'expenses'])->name('expenses');
+            Route::get('/export/{type}', [ReportController::class, 'export'])->name('export');
+            Route::get('/daily-installments', [ReportController::class, 'dailyInstallments'])->name('daily-installments');
+            Route::get('/daily-installment-income', [ReportController::class, 'dailyInstallmentIncome'])->name('daily-installment-income');
+        });
     });
 
     // Audit Logs

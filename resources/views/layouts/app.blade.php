@@ -82,7 +82,7 @@
 
         // Session timeout auto-logout
         let inactivityTimer;
-        const sessionTimeout = {{ $sessionTimeout ?? 120 }} * 60 * 1000; // Convert to milliseconds
+        const sessionTimeout = {{ (!empty($sessionTimeout) && is_numeric($sessionTimeout) && $sessionTimeout > 0) ? $sessionTimeout : 120 }} * 60 * 1000; // Convert to milliseconds
         
         function resetInactivityTimer() {
             clearTimeout(inactivityTimer);
@@ -610,7 +610,7 @@
             content: '';
         }
         
-        .form-input {
+        .form-input, .form-select, .form-control {
             width: 100%;
             padding: 10px 14px;
             font-size: 15px;
@@ -622,25 +622,28 @@
             box-sizing: border-box;
         }
         
-        .form-input:focus {
+        .form-input:focus, .form-select:focus, .form-control:focus {
             outline: none;
-            border-color: var(--primary-red);
+            border-color: var(--primary-red, #DC2626);
             box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
         }
         
-        .form-input:disabled {
+        .form-input:disabled, .form-select:disabled, .form-control:disabled {
             background: #F3F4F6;
             color: #9CA3AF;
             cursor: not-allowed;
         }
         
-        select.form-input {
+        select.form-input, select.form-select, select.form-control {
             cursor: pointer;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
-            background-position: right 8px center;
+            background-position: right 12px center;
             background-repeat: no-repeat;
             background-size: 16px;
             padding-right: 36px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
         }
         
         /* Button Styling */
