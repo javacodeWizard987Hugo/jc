@@ -14,10 +14,9 @@ class Item extends Model
     'unit_of_measure',
     'cost_price',
     'selling_price',
+    'retail_price',
     'supplier_id',
     'is_active',
-    'emi_lock_mode',
-    'emi_number',
 ];
 
     protected function casts(): array
@@ -25,6 +24,7 @@ class Item extends Model
         return [
             'cost_price' => 'decimal:2',
             'selling_price' => 'decimal:2',
+            'retail_price' => 'decimal:2',
             'expiry_date' => 'date',
             'is_active' => 'boolean',
         ];

@@ -246,20 +246,6 @@ body {
         </div>
 
         <div class="dotted-row">
-            <strong>Name:</strong> <span class="dotted-line" style="min-width: 60%;">{{ $sale->customer->name ?? '' }}</span>
-            <span style="font-weight: bold; margin-left: 10px;">Mr./Ms.</span>
-        </div>
-
-        <div class="dotted-row">
-            <strong>Address:</strong> <span class="dotted-line" style="min-width: 85%;">{{ $sale->customer->address ?? '' }}</span>
-        </div>
-
-        <div style="display: flex; justify-content: space-between;" class="dotted-row">
-            <div style="width: 48%;"><strong>Telephone No.:</strong> <span class="dotted-line" style="min-width: 60%;">{{ $sale->customer->phone ?? '' }}</span></div>
-            <div style="width: 48%;"><strong>NIC No.:</strong> <span class="dotted-line" style="min-width: 60%;">{{ $sale->customer->nic ?? '' }}</span></div>
-        </div>
-
-        <div class="dotted-row">
             <strong>Goods/Item:</strong> 
             <span class="dotted-line" style="min-width: 80%;">
                 @foreach($sale->items as $item)
@@ -279,7 +265,37 @@ body {
         </div>
     </div>
 
-    <!-- PAYMENT CARD TABLE -->
+    <!-- 1ST GUARANTOR SECTION -->
+    <div class="applicant-section">
+        <div class="applicant-title">1ST GUARANTOR DETAILS</div>
+        <div class="dotted-row">
+            <strong>Name:</strong> <span class="dotted-line" style="min-width: 80%;">{{ $installment->guarantor_name ?? 'N/A' }}</span>
+        </div>
+        <div class="dotted-row">
+            <strong>Address:</strong> <span class="dotted-line" style="min-width: 80%;">{{ $installment->guarantor_address ?? 'N/A' }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;" class="dotted-row">
+            <div style="width: 48%;"><strong>Telephone No.:</strong> <span class="dotted-line" style="min-width: 60%;">{{ $installment->guarantor_mobile_number ?? 'N/A' }}</span></div>
+            <div style="width: 48%;"><strong>NIC No.:</strong> <span class="dotted-line" style="min-width: 60%;">{{ $installment->guarantor_nic ?? 'N/A' }}</span></div>
+        </div>
+    </div>
+
+    <!-- 2ND GUARANTOR SECTION (OPTIONAL) -->
+    <div class="applicant-section">
+        <div class="applicant-title">2ND GUARANTOR DETAILS (OPTIONAL)</div>
+        <div class="dotted-row">
+            <strong>Name:</strong> <span class="dotted-line" style="min-width: 80%;">{{ $installment->guarantor_2_name ?? '' }}</span>
+        </div>
+        <div class="dotted-row">
+            <strong>Address:</strong> <span class="dotted-line" style="min-width: 80%;">{{ $installment->guarantor_2_address ?? '' }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;" class="dotted-row">
+            <div style="width: 48%;"><strong>Telephone No.:</strong> <span class="dotted-line" style="min-width: 60%;">{{ $installment->guarantor_2_phone ?? '' }}</span></div>
+            <div style="width: 48%;"><strong>NIC No.:</strong> <span class="dotted-line" style="min-width: 60%;">{{ $installment->guarantor_2_nic ?? '' }}</span></div>
+        </div>
+    </div>
+<!--
+  
     <table class="table-schedule">
         <thead>
             <tr>
@@ -315,8 +331,8 @@ body {
             @endfor
         </tbody>
     </table>
-
-    <!-- FOOTER NOTES -->
+--?
+   FOOTER NOTES -->
     <div class="footer-note">
         This card must be produced when making any payment. (The Company will not be responsible for payments made without a receipt.)
     </div>
